@@ -1,0 +1,128 @@
+<odoo>
+  <data>
+    
+ <menuitem name="return" id="return_products.menu_root"/>
+<!--campo de fecha limited en la venta-->
+	<record id="inherit_date_limited" model="ir.ui.view">
+  		<field name="name">date-limited</field>
+ 	   	<field name="model">sale.order</field>
+       	<field name="inherit_id" ref="sale.view_order_form" />
+       	<field name="arch" type="xml">
+   		 	<data>
+     			 <xpath expr="//field[@name='validity_date']" position="after"> 
+       			 	<field name="fecha_limit"/>
+      			</xpath>
+   	 	 	</data>
+   		</field>
+	</record> 
+
+<!--campos para ver si es cliente o proveedor-->
+
+	<record id="inherit_return_cliente" model="ir.ui.view">
+  		<field name="name">return.cliente</field>
+  		<field name="model">stock.picking.type</field>
+  		<field name="inherit_id" ref="stock.view_picking_type_form"/>
+ 		<field name="arch" type="xml">
+  			<data>
+      			<xpath expr="//field[@name='show_reserved']" position="after">
+        			<field name="client_devo"/>
+        			<field name="provee_devo"/>
+      			</xpath>
+    		</data>  
+ 		 </field> 
+	</record>
+
+
+
+
+<!-- menut principal de devoluciones-->	
+    
+    <record id="action_modulo_data" model="ir.ui.view">
+      <field name="name">Devoluciones</field>
+      <field name="model">return.clien</field>
+      <field name="arch" type="xml">
+      	<data>
+	        <form>
+	        	<header>
+	        		<button name="bnt1" type="object"  string="Draft"  class="oe_highlight" />
+	        		<button name="bnt2" type="object" string="Approved" class="oe_highlight" />
+	        		<button name="btn3" type="object" invisible="1" string="Review piece" class="oe_highlight"/>
+	        		<button name="btn4" type="object" invisible="1" string="Good condition" class="oe_highlight"/>
+	        		<button name="btn5" type="object" invisible="1" string="Manufacturing" class="oe_highlight"/>
+	        		<button name="btn6" type="object" invisible="1" string="Processing" class="oe_highlight"/>
+	        		<button name="btn8" type="object" invisible="1" string="Rejected"/>
+	        		<field name="state" widget="statusbar"/>
+
+	        	</header>
+	        	<group>
+	        		<group>
+	     	        	<field name="busqueda"/>
+	        			<button name="buscar" type="object" string="buscar" class="btn-primary"/>   			
+	        			<field name="num_clie"/>
+	        			<field name="nombre_clien"/>
+	        			<field name="estado_clien"/>
+	        		</group>
+	        		<group>
+
+	        			<field name="fecha_actual" readonly="1"/>
+	        			<field name="cuidad_clien"/> 
+	        			<field name="codi_pos_clien"/>
+	        			<field name="busqueda"/> 
+	        			<field name="rel" invisible="1"/>
+	        		</group>
+
+	        	</group>
+	        	<notebook>
+	                <page string="Productos a Validar">
+	                	<field name="tabla" nolabel="1">
+		                	<tree string="Product order" editable="bottom">
+		                		<field name="producto"/>
+		                		<field name="talla"/>
+		                		<field name="serie"/>
+		                		<field name="pedido_venta"/>
+		                		<field name="fecha_compra"/>
+		                		<field name="estatus"/>
+		                		<field name="motivo"/>
+		                		<field name="pregresar_proveedor"/>
+
+		                	</tree>
+		               	</field>
+		          		
+	  	            </page>
+                    <page name="tablados" string="Productos que no pasan calidad">
+                    	<field name="tablados" nolabel="1">
+		                	<tree string="Product order" editable="bottom">
+		                		<field name="producto_r"/>
+		                		<field name="talla_r"/>
+		                		<field name="serie_r"/>
+		                		<field name="pedido_venta_r"/>
+		                		<field name="fecha_compra_r"/>
+		                		<field name="estatus_r"/>
+		                		<field name="motivo_r"/>
+		                	</tree>
+		               	</field>
+                     	
+                    </page>  
+	        	</notebook>
+	        </form>
+        </data>
+      </field>
+    </record>
+
+
+    <record id="action_modulo_odoo" model="ir.actions.act_window">
+      <field name='name'>Devoluciones clien</field>
+      <field name='type'>ir.actions.act_window</field>
+      <field name='res_model'>return.clien</field>
+      <field name='view_type'>form</field>
+      <field name='view_mode'>tree,form</field>
+    </record>
+
+    <menuitem name="Devoluciones" id="menu-item1" parent="return_products.menu_root" />
+    <menuitem name="clientes" id="menu-item2" parent="menu-item1" action="action_modulo_odoo" />
+
+
+
+  </data>
+</odoo>
+
